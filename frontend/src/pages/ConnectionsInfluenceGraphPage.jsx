@@ -18,6 +18,7 @@ import {
 } from 'lucide-react';
 import { Button } from '../components/ui/button';
 import ForceGraphCore from '../graph/core/ForceGraphCore';
+import CompareModal from '../components/connections/CompareModal';
 
 const BACKEND_URL = process.env.REACT_APP_BACKEND_URL || '';
 
