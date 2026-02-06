@@ -916,7 +916,7 @@ export default function TokensPage() {
         setResolvedData(resolveResponse.data);
         
         // P1.1 FIX: ALWAYS fetch context, не зависит от confidence
-        // Если данных нет, API вернет пустой ответ - это норма
+        // If no data, API returns empty response - this is normal
         const contextResponse = await marketApi.getMarketContext(
           resolveResponse.data.normalizedId || tokenInput
         );
