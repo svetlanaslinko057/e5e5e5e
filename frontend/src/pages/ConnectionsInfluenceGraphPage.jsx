@@ -434,6 +434,8 @@ export default function ConnectionsInfluenceGraphPage() {
   const [showFilters, setShowFilters] = useState(false);
   const [selectedNode, setSelectedNode] = useState(null);
   const [nodeDetails, setNodeDetails] = useState(null);
+  const [compareNode, setCompareNode] = useState(null); // For Compare Modal
+  const [showCompareModal, setShowCompareModal] = useState(false);
   const [filters, setFilters] = useState({
     profiles: ['retail', 'influencer', 'whale'],
     early_signal: [],
