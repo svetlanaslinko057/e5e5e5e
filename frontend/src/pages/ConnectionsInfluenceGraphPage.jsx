@@ -257,7 +257,7 @@ const GraphFilterPanel = ({ filters, onChange, onClose }) => {
 // NODE DETAILS PANEL
 // ============================================================
 
-const NodeDetailsPanel = ({ node, details, onClose }) => {
+const NodeDetailsPanel = ({ node, details, onClose, onCompare }) => {
   if (!node) return null;
 
   return (
@@ -332,10 +332,20 @@ const NodeDetailsPanel = ({ node, details, onClose }) => {
           </div>
         )}
 
-        {/* Action */}
-        <Link to={`/connections/${node.id}`} className="block w-full">
-          <Button className="w-full">View Full Profile</Button>
-        </Link>
+        {/* Actions */}
+        <div className="space-y-2">
+          <Link to={`/connections/${node.id}`} className="block w-full">
+            <Button className="w-full">View Full Profile</Button>
+          </Link>
+          <Button 
+            variant="outline" 
+            className="w-full flex items-center justify-center gap-2"
+            onClick={() => onCompare(node)}
+          >
+            <Scale className="w-4 h-4" />
+            Compare with...
+          </Button>
+        </div>
       </div>
     </div>
   );
