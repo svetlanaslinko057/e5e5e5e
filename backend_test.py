@@ -208,6 +208,91 @@ class ConnectionsDropdownTester:
             self.log(f"Connections Graph GET test failed: {e}")
             return False
     
+    def test_mock_score_api(self) -> bool:
+        """Test /api/connections/score/mock returns valid data"""
+        try:
+            response = self.session.get(f"{self.base_url}/api/connections/score/mock")
+            if response.status_code == 200:
+                data = response.json()
+                if data.get('ok') and 'data' in data:
+                    score_data = data['data']
+                    # Check for score structure
+                    required_fields = ['influence_score', 'risk_level']
+                    has_required = all(field in score_data for field in required_fields)
+                    self.log(f"Mock score: influence={score_data.get('influence_score')}, risk={score_data.get('risk_level')}")
+                    return has_required
+            return False
+        except Exception as e:
+            self.log(f"Mock score API test failed: {e}")
+            return False
+    
+    def test_mock_early_signal_api(self) -> bool:
+        """Test /api/connections/early-signal/mock returns breakout data"""
+        try:
+            response = self.session.get(f"{self.base_url}/api/connections/early-signal/mock")
+            if response.status_code == 200:
+                data = response.json()
+                if data.get('ok') and 'data' in data:
+                    signal_data = data['data']
+                    # Check for early signal structure
+                    required_fields = ['early_signal_score', 'badge', 'confidence']
+                    has_required = all(field in signal_data for field in required_fields)
+                    self.log(f"Mock early signal: score={signal_data.get('early_signal_score')}, badge={signal_data.get('badge')}")
+                    return has_required
+            return False
+        except Exception as e:
+            self.log(f"Mock early signal API test failed: {e}")
+            return False
+    
+    def test_admin_login_api(self) -> bool:
+        """Test /api/admin/auth/login with admin/admin12345"""
+        try:
+            login_data = {
+                "username": "admin",
+                "password": "admin12345"
+            }
+            response = self.session.post(
+                f"{self.base_url}/api/admin/auth/login",
+                json=login_data,
+                headers={'Content-Type': 'application/json'}
+            )
+            if response.status_code == 200:
+                data = response.json()
+                if data.get('ok') and 'token' in data:
+                    self.admin_token = data['token']
+                    self.log(f"Admin login successful, token received")
+                    return True
+            return False
+        except Exception as e:
+            self.log(f"Admin login API test failed: {e}")
+            return False
+    
+    def test_admin_connections_overview(self) -> bool:
+        """Test /api/admin/connections/overview (requires auth)"""
+        try:
+            if not hasattr(self, 'admin_token'):
+                self.log("No admin token available, skipping overview test")
+                return False
+                
+            headers = {
+                'Authorization': f'Bearer {self.admin_token}',
+                'Content-Type': 'application/json'
+            }
+            response = self.session.get(f"{self.base_url}/api/admin/connections/overview", headers=headers)
+            if response.status_code == 200:
+                data = response.json()
+                if data.get('ok') and 'data' in data:
+                    overview_data = data['data']
+                    # Check for overview structure
+                    expected_fields = ['enabled', 'health', 'stats']
+                    has_required = all(field in overview_data for field in expected_fields)
+                    self.log(f"Admin overview: enabled={overview_data.get('enabled')}, health={overview_data.get('health', {}).get('status')}")
+                    return has_required
+            return False
+        except Exception as e:
+            self.log(f"Admin connections overview test failed: {e}")
+            return False
+    
     def run_all_tests(self) -> Dict[str, Any]:
         """Run all Connections dropdown tests and return results"""
         self.log("🚀 Starting Connections Dropdown Backend Testing")
