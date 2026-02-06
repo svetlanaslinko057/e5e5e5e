@@ -550,8 +550,8 @@ function ConfidenceBlock({ signal }) {
           Signal Confidence
         </h3>
         <InfoTip>
-          Confidence отражает ПОЛНОТУ ДАННЫХ, а не точность сигнала.
-          Низкий confidence означает меньше исторических данных для анализа.
+          Confidence reflects DATA COMPLETENESS, not signal accuracy.
+          Low confidence means less historical data for analysis.
         </InfoTip>
       </div>
       
