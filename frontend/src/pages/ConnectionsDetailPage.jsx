@@ -215,7 +215,7 @@ export default function ConnectionsDetailPage() {
             early_signal_score: earlyScore,
             badge: earlyScore >= 700 && accel >= 0.4 ? 'breakout' : earlyScore >= 450 ? 'rising' : 'none',
             confidence: 0.5,
-            reasons: velocity > 0.3 ? ['Положительная динамика роста'] : [],
+            reasons: velocity > 0.3 ? ['Positive growth dynamics'] : [],
           });
         }
         
