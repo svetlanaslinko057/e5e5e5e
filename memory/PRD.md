@@ -1,104 +1,101 @@
 # Connections Module - PRD
 
-## Original Problem Statement
-Реализовать полноценный **Influence Graph** как продуктовый экран в Connections модуле:
-- Backend Graph API с contracts, builder, config
-- Frontend с ForceGraphCore, фильтрами, suggestions, selection
-- Admin config для управления параметрами графа
-- **БЕЗ TWITTER** - на mock/Mongo данных
+## Оригинальное требование
+Развернуть проект Connections Module с GitHub (https://github.com/svetlanaslinko057/555768), следуя инструкциям репозитория. Изолированный модуль для справедливого рейтинга инфлюенсеров.
 
 ## Архитектура
 
-### Navigation
+### Технологический стек
+- **Backend**: Node.js 20+ (Fastify/TypeScript) + Python FastAPI proxy
+- **Frontend**: React 19 + Tailwind CSS
+- **Database**: MongoDB 6.0+
+- **Порты**: FastAPI (8001), Fastify (8003), Frontend (3000)
+
+### Структура
 ```
-Sidebar:
-└── Connections (dropdown)
-    ├── Influencers → /connections
-    ├── Graph → /connections/graph  ← НОВЫЙ ЭКРАН
-    └── Radar → /connections/radar
+/app/
+├── backend/
+│   ├── src/
+│   │   ├── server-minimal.ts      # Entry point
+│   │   ├── app-minimal.ts         # App config
+│   │   └── modules/connections/   # Connections Module
+│   └── server.py                  # FastAPI proxy
+├── frontend/
+│   └── src/
+│       ├── pages/
+│       │   ├── ConnectionsPage.jsx
+│       │   ├── ConnectionsEarlySignalPage.jsx
+│       │   └── admin/AdminConnectionsPage.jsx
+│       └── components/connections/
+└── docs/
+    ├── CONCEPT.md
+    ├── CONNECTIONS_MODULE.md
+    └── QUICK_START.md
 ```
 
-### Backend Structure
-```
-/backend/src/modules/connections/
-├── contracts/
-│   └── graph.contracts.ts       ← P0.1 ✅
-├── core/graph/
-│   ├── graph-config.ts          ← P0.2 ✅
-│   ├── graph-scoring.ts         ← P0.2 ✅
-│   └── build-graph.ts           ← P0.2 ✅
-├── api/
-│   └── graph.routes.ts          ← P0.3 ✅
-└── admin/
-    └── graph-admin.routes.ts    ← P0.4 ✅
-```
+## Персоны пользователей
+1. **Трейдеры/Инвесторы** — поиск "восходящих звёзд" до массового внимания
+2. **Маркетологи** — выбор инфлюенсеров с реальной аудиторией
+3. **Аналитики** — мониторинг динамики влияния
 
-## P0 - Backend Graph API ✅ DONE
+## Основные функции
 
-### P0.1 Contracts ✅
-- `GraphNode`, `GraphEdge`, `ConnectionsGraphResponse`
-- `GraphFiltersSchema`, `GraphConfig`
-- Zod schemas для валидации
+### ✅ Реализовано
+- **Influence Scoring** — качество влияния (Base + Adjusted)
+- **Trend Analysis** — Velocity + Acceleration метрики
+- **Early Signal Detection** — Breakout/Rising детекция
+- **Risk Detection** — Уровни риска (low/medium/high)
+- **Alerts Engine** — Генерация алертов (preview режим)
+- **Admin Control Plane** — Управление модулем
+- **Mock Mode** — Работа без Twitter API
 
-### P0.2 Graph Builder ✅
-- `buildConnectionsGraph()` - собирает граф из MongoDB
-- `computeEdgeWeight()` - расчёт веса рёбер
-- Pairwise overlap calculation
-- Mock data generators
+### Режимы работы
+- **Mock** (текущий) — тестовые данные
+- **Sandbox** — ограниченные реальные данные
+- **Twitter Live** — полные данные (требует API keys)
 
-### P0.3 Endpoints ✅
-- `GET /api/connections/graph` - граф с фильтрами
-- `GET /api/connections/graph/suggestions` - рекомендации
-- `GET /api/connections/graph/filters` - schema для UI
-- `GET /api/connections/graph/mock` - тестовые данные
-- `GET /api/connections/graph/node/:id` - детали узла
-- `GET /api/connections/graph/ranking` - таблица ранкинга
+## Что реализовано (2026-02-06)
 
-### P0.4 Admin Config ✅
-- `GET /api/admin/connections/graph/config`
-- `PATCH /api/admin/connections/graph/config`
-- `GET /api/admin/connections/graph/stats`
+### Backend
+- [x] FastAPI proxy → Node.js Fastify
+- [x] Connections Module API endpoints
+- [x] Admin authentication (JWT)
+- [x] MongoDB подключение
+- [x] Mock data generation
 
-## P1 - Frontend Graph UI (IN PROGRESS)
+### Frontend
+- [x] /connections — список инфлюенсеров
+- [x] /connections/radar — Early Signal визуализация
+- [x] /admin/connections — Admin Control Plane
+- [x] Фильтры и сортировка
 
-### P1.1 Навигация ✅
-- Connections dropdown с 3 вкладками
-- Tabs: Influencers | Graph | Radar
+### API Endpoints
+- `GET /api/connections/health`
+- `GET /api/connections/accounts`
+- `POST /api/connections/score`
+- `POST /api/connections/early-signal`
+- `GET /api/admin/connections/overview`
 
-### P1.2 Graph Canvas ✅
-- ForceGraphCore визуализация
-- 30 nodes, 233 edges
-- Drag/zoom/pan
+## Приоритеты (Backlog)
 
-### P1.3 Filter Modal 🔜
-- Schema-driven (из /graph/filters API)
-- Nodes: followers, influence, profile, risk, early signal
-- Edges: min_jaccard, min_shared, strength
+### P0 - Критичные
+- [x] Базовое развёртывание
 
-### P1.4 Suggestions Panel 🔜
-- "Explore suggestions" из /graph/suggestions
-- Быстрое переключение seed
+### P1 - Высокий
+- [ ] Twitter API интеграция
+- [ ] Alert Delivery (Telegram/Discord)
 
-### P1.5 Node Selection → Compare 🔜
-- Side panel при клике
-- Compare modal integration
+### P2 - Средний
+- [ ] Historical Data Storage
+- [ ] ML-enhanced Scoring
 
-## P2 - Product Polish (TODO)
-- Admin UI секция Graph
-- Performance & caching
-- Parity with old project
+### P3 - Низкий
+- [ ] Cross-platform (Reddit, Telegram)
+- [ ] Prediction Models
 
-## Тестирование
-- Backend API: 100%
-- Frontend rendering: 100%
-- Filter integration: pending
-- Admin UI: pending
+## Credentials
+- **Admin**: admin / admin12345
 
-## MOCK данные
-Граф работает на mock данных (generateMockAccounts). Twitter API НЕ требуется.
-
-## Next Tasks
-1. Реализовать Filter Modal (schema-driven)
-2. Добавить Suggestions panel
-3. Node Selection → Side Panel → Compare
-4. Admin UI для graph config
+## Ссылки
+- Документация: /app/docs/
+- GitHub: https://github.com/svetlanaslinko057/555768
