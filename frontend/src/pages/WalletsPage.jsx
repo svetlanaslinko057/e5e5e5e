@@ -788,7 +788,7 @@ export default function WalletsPage() {
   //
   // ✅ ЕДИНСТВЕННОЕ ПРАВИЛО:
   //    if (status === 'analyzing' || status === 'pending') showAnalyzing()
-  //    else showResult() // даже если данных нет
+  //    else showResult() // even if no data
   // ========================================
   
   const isActuallyAnalyzing = resolvedData && (
