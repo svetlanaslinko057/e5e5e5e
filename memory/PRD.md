@@ -86,20 +86,23 @@
 
 ## Приоритеты (Backlog)
 
-### P0 - Критичные
-- [x] Базовое развёртывание
+### P0 - Backend Core — ✅ ЗАВЕРШЁН
 
-### P1 - Высокий
-- [ ] Twitter API интеграция
-- [ ] Alert Delivery (Telegram/Discord)
+### P1 - Graph как Продукт — ✅ ЗАВЕРШЁН
 
-### P2 - Средний
+### P2 - Интеграции
+- [ ] Twitter API интеграция (переключение Mock → Twitter Live)
+- [ ] Telegram Delivery для алертов
+- [ ] Discord Webhooks
+
+### P3 - Аналитика
 - [ ] Historical Data Storage
 - [ ] ML-enhanced Scoring
-
-### P3 - Низкий
-- [ ] Cross-platform (Reddit, Telegram)
 - [ ] Prediction Models
+
+### P4 - Расширение
+- [ ] Cross-platform (Reddit, Telegram channels)
+- [ ] Export/Share функциональность
 
 ## Credentials
 - **Admin**: admin / admin12345
