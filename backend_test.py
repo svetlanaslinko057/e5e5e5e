@@ -390,6 +390,193 @@ class ConnectionsDropdownTester:
             self.log(f"Graph node details API test failed: {e}")
             return False
     
+    # ============================================================
+    # P2.2: GRAPH STATE SHARING API TESTS
+    # ============================================================
+    
+    def test_graph_state_info_api(self) -> bool:
+        """Test GET /api/connections/graph/state/info returns version info"""
+        try:
+            response = self.session.get(f"{self.base_url}/api/connections/graph/state/info")
+            if response.status_code == 200:
+                data = response.json()
+                if data.get('ok') and 'data' in data:
+                    info_data = data['data']
+                    # Check for required version info fields
+                    required_fields = ['currentVersion', 'supportedVersions', 'features', 'encoding', 'maxLength']
+                    has_required = all(field in info_data for field in required_fields)
+                    
+                    # Validate specific values
+                    version_ok = info_data.get('currentVersion') == '1.0'
+                    encoding_ok = info_data.get('encoding') == 'base64-url-safe'
+                    features_ok = isinstance(info_data.get('features'), dict)
+                    
+                    self.log(f"Graph state info: version={info_data.get('currentVersion')}, encoding={info_data.get('encoding')}")
+                    return has_required and version_ok and encoding_ok and features_ok
+            return False
+        except Exception as e:
+            self.log(f"Graph state info API test failed: {e}")
+            return False
+    
+    def test_graph_state_encode_api(self) -> bool:
+        """Test POST /api/connections/graph/state/encode encodes filters and highlight"""
+        try:
+            # Test state with filters and highlight
+            test_state = {
+                "version": "1.0",
+                "filters": {
+                    "profiles": ["retail", "influencer"],
+                    "early_signal": ["breakout"],
+                    "limit_nodes": 30
+                },
+                "highlight": "test_node_123"
+            }
+            
+            response = self.session.post(
+                f"{self.base_url}/api/connections/graph/state/encode",
+                json={"state": test_state},
+                headers={'Content-Type': 'application/json'}
+            )
+            
+            if response.status_code == 200:
+                data = response.json()
+                if data.get('ok') and 'data' in data:
+                    encode_data = data['data']
+                    # Check for required encode response fields
+                    required_fields = ['encoded', 'length', 'version']
+                    has_required = all(field in encode_data for field in required_fields)
+                    
+                    # Validate encoded string
+                    encoded = encode_data.get('encoded', '')
+                    encoded_ok = isinstance(encoded, str) and len(encoded) > 0
+                    
+                    # Check it's URL-safe (no +, /, =)
+                    url_safe = '+' not in encoded and '/' not in encoded and '=' not in encoded
+                    
+                    self.log(f"Graph state encode: length={encode_data.get('length')}, url_safe={url_safe}")
+                    return has_required and encoded_ok and url_safe
+            return False
+        except Exception as e:
+            self.log(f"Graph state encode API test failed: {e}")
+            return False
+    
+    def test_graph_state_decode_api(self) -> bool:
+        """Test POST /api/connections/graph/state/decode decodes base64 state correctly"""
+        try:
+            # First encode a state to get a valid encoded string
+            test_state = {
+                "version": "1.0",
+                "filters": {
+                    "profiles": ["whale"],
+                    "limit_nodes": 25
+                },
+                "highlight": "decode_test_node"
+            }
+            
+            # Encode first
+            encode_response = self.session.post(
+                f"{self.base_url}/api/connections/graph/state/encode",
+                json={"state": test_state},
+                headers={'Content-Type': 'application/json'}
+            )
+            
+            if encode_response.status_code == 200:
+                encode_data = encode_response.json()
+                if encode_data.get('ok') and 'data' in encode_data:
+                    encoded_string = encode_data['data'].get('encoded')
+                    
+                    if encoded_string:
+                        # Now test decode
+                        decode_response = self.session.post(
+                            f"{self.base_url}/api/connections/graph/state/decode",
+                            json={"encoded": encoded_string},
+                            headers={'Content-Type': 'application/json'}
+                        )
+                        
+                        if decode_response.status_code == 200:
+                            decode_data = decode_response.json()
+                            if decode_data.get('ok') and 'data' in decode_data:
+                                result_data = decode_data['data']
+                                # Check for required decode response fields
+                                required_fields = ['state', 'valid']
+                                has_required = all(field in result_data for field in required_fields)
+                                
+                                # Validate decoded state matches original
+                                decoded_state = result_data.get('state', {})
+                                version_match = decoded_state.get('version') == test_state['version']
+                                highlight_match = decoded_state.get('highlight') == test_state['highlight']
+                                
+                                self.log(f"Graph state decode: valid={result_data.get('valid')}, version_match={version_match}")
+                                return has_required and version_match and highlight_match
+            return False
+        except Exception as e:
+            self.log(f"Graph state decode API test failed: {e}")
+            return False
+    
+    def test_graph_state_encode_with_base_url(self) -> bool:
+        """Test encode API with baseUrl parameter creates shareUrl"""
+        try:
+            test_state = {
+                "version": "1.0",
+                "filters": {
+                    "profiles": ["influencer"],
+                    "limit_nodes": 40
+                }
+            }
+            
+            base_url = "https://example.com/connections/graph"
+            
+            response = self.session.post(
+                f"{self.base_url}/api/connections/graph/state/encode",
+                json={"state": test_state, "baseUrl": base_url},
+                headers={'Content-Type': 'application/json'}
+            )
+            
+            if response.status_code == 200:
+                data = response.json()
+                if data.get('ok') and 'data' in data:
+                    encode_data = data['data']
+                    # Check for shareUrl when baseUrl is provided
+                    has_share_url = 'shareUrl' in encode_data
+                    share_url = encode_data.get('shareUrl', '')
+                    
+                    # Validate shareUrl format
+                    share_url_ok = share_url.startswith(base_url) and '?state=' in share_url
+                    
+                    self.log(f"Graph state encode with baseUrl: shareUrl created={has_share_url}")
+                    return has_share_url and share_url_ok
+            return False
+        except Exception as e:
+            self.log(f"Graph state encode with baseUrl test failed: {e}")
+            return False
+    
+    def test_graph_state_validation_errors(self) -> bool:
+        """Test state validation returns proper errors for invalid data"""
+        try:
+            # Test with invalid state (missing required structure)
+            invalid_state = {
+                "filters": {
+                    "limit_nodes": "invalid_number"  # Should be number, not string
+                }
+            }
+            
+            response = self.session.post(
+                f"{self.base_url}/api/connections/graph/state/encode",
+                json={"state": invalid_state},
+                headers={'Content-Type': 'application/json'}
+            )
+            
+            if response.status_code == 400:
+                data = response.json()
+                # Should return error for invalid state
+                has_error = not data.get('ok') and 'error' in data
+                self.log(f"Graph state validation: properly rejects invalid state")
+                return has_error
+            return False
+        except Exception as e:
+            self.log(f"Graph state validation test failed: {e}")
+            return False
+    
     def run_all_tests(self) -> Dict[str, Any]:
         """Run all Connections dropdown tests and return results"""
         self.log("🚀 Starting Connections Module Backend Testing")
