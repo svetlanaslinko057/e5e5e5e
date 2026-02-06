@@ -26,7 +26,7 @@ const Sparkline = ({ data, color = '#3b82f6', height = 40, width = 200 }) => {
   if (!data || data.length < 2) {
     return (
       <div className="flex items-center justify-center h-10 text-gray-400 text-sm">
-        Недостаточно данных
+        Insufficient data
       </div>
     );
   }
