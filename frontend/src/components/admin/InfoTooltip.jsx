@@ -84,18 +84,18 @@ export const ADMIN_TOOLTIPS = {
   pipelineRows: 'Number of records processed.',
   
   // Telegram Notifications (Phase 2.3)
-  telegramEnabled: 'Глобальное включение/выключение доставки алертов в Telegram. Когда OFF — никакие алерты не отправляются.',
-  telegramPreviewOnly: 'Режим предпросмотра. Алерты логируются, но НЕ отправляются в Telegram. Используйте для тестирования.',
-  telegramChatId: 'ID канала/группы для админских алертов. Опционально — основная доставка идёт в личные чаты подписчиков.',
-  telegramEarlyBreakout: 'Алерты о раннем росте влияния. Сигнал, что аккаунт показывает рост, который рынок ещё не заметил.',
-  telegramStrongAcceleration: 'Алерты о резком ускорении. Динамика аккаунта усиливается, возможен переход в breakout.',
-  telegramTrendReversal: 'Алерты об изменении тренда. Направление динамики аккаунта изменилось.',
-  telegramCooldown: 'Минимальный интервал между алертами одного типа для одного аккаунта. Защита от спама.',
-  telegramTestMessage: 'Отправить тестовое сообщение всем активным подписчикам для проверки настройки.',
-  telegramDispatch: 'Принудительно отправить накопленные алерты. Обычно происходит автоматически.',
-  telegramStats: 'Статистика доставки за последние 24 часа: отправлено, пропущено, ошибки.',
-  telegramHistory: 'История отправленных алертов с деталями: тип, аккаунт, время, статус.',
-  telegramSubscribers: 'Пользователи получают алерты после /start в боте. Mute: /connections off. Все настройки — на платформе.',
+  telegramEnabled: 'Global toggle for Telegram alert delivery. When OFF — no alerts are sent.',
+  telegramPreviewOnly: 'Preview mode. Alerts are logged but NOT sent to Telegram. Use for testing.',
+  telegramChatId: 'Channel/group ID for admin alerts. Optional — main delivery goes to subscriber private chats.',
+  telegramEarlyBreakout: 'Alerts about early influence growth. Signal that account shows growth the market hasn\'t noticed yet.',
+  telegramStrongAcceleration: 'Alerts about sharp acceleration. Account dynamics are strengthening, possible breakout transition.',
+  telegramTrendReversal: 'Alerts about trend changes. Account dynamics direction has changed.',
+  telegramCooldown: 'Minimum interval between alerts of the same type for one account. Spam protection.',
+  telegramTestMessage: 'Send a test message to all active subscribers to verify setup.',
+  telegramDispatch: 'Force send accumulated alerts. Usually happens automatically.',
+  telegramStats: 'Delivery statistics for the last 24 hours: sent, skipped, errors.',
+  telegramHistory: 'History of sent alerts with details: type, account, time, status.',
+  telegramSubscribers: 'Users receive alerts after /start in the bot. Mute: /connections off. All settings — on the platform.',
 };
 
 export default InfoTooltip;
