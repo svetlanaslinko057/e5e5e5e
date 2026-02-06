@@ -96,6 +96,7 @@ export function formatTelegramMessage(baseUrl: string, e: ConnectionsAlertEvent)
 
   // 🚀 EARLY BREAKOUT
   if (e.type === 'EARLY_BREAKOUT') {
+    const graphLink = buildGraphLinkWithState(baseUrl, e.account_id);
     return [
       '🚀 EARLY BREAKOUT',
       '',
@@ -112,6 +113,9 @@ export function formatTelegramMessage(baseUrl: string, e: ConnectionsAlertEvent)
       '',
       '🔗 View details:',
       link,
+      '',
+      '📊 Open in Graph:',
+      graphLink,
     ].join('\n');
   }
 
