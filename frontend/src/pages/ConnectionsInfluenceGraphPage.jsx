@@ -707,6 +707,23 @@ export default function ConnectionsInfluenceGraphPage() {
           selectedId={selectedNode?.id}
         />
       </div>
+
+      {/* Compare Modal */}
+      {showCompareModal && compareNode && (
+        <CompareModal
+          accountA={compareNode.id}
+          accountB={null}
+          onClose={() => {
+            setShowCompareModal(false);
+            setCompareNode(null);
+          }}
+          availableAccounts={graphData.nodes.map(n => ({
+            id: n.id,
+            handle: n.handle,
+            display_name: n.label,
+          }))}
+        />
+      )}
     </div>
   );
 }
