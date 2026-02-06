@@ -3,9 +3,11 @@
  * 
  * Uses ForceGraphCore from existing graph engine
  * with full filtering, ranking table below, and node details panel
+ * 
+ * P2.2: Share / Persist Graph State support
  */
-import { useState, useEffect, useCallback } from 'react';
-import { Link } from 'react-router-dom';
+import { useState, useEffect, useCallback, useMemo } from 'react';
+import { Link, useSearchParams } from 'react-router-dom';
 import {
   Network,
   Filter,
@@ -16,13 +18,50 @@ import {
   AlertTriangle,
   Radio,
   Sparkles,
-  Scale
+  Scale,
+  Share2,
+  Check,
+  Copy
 } from 'lucide-react';
 import { Button } from '../components/ui/button';
 import ForceGraphCore from '../graph/core/ForceGraphCore';
 import CompareModal from '../components/connections/CompareModal';
 
 const BACKEND_URL = process.env.REACT_APP_BACKEND_URL || '';
+
+// ============================================================
+// GRAPH STATE HELPERS (P2.2)
+// ============================================================
+
+const encodeState = async (state) => {
+  try {
+    const res = await fetch(`${BACKEND_URL}/api/connections/graph/state/encode`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ state }),
+    });
+    const data = await res.json();
+    return data.ok ? data.data.encoded : null;
+  } catch (e) {
+    console.error('[GraphState] Encode error:', e);
+    return null;
+  }
+};
+
+const decodeState = async (encoded) => {
+  try {
+    const res = await fetch(`${BACKEND_URL}/api/connections/graph/state/decode`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ encoded }),
+    });
+    const data = await res.json();
+    return data.ok ? data.data.state : null;
+  } catch (e) {
+    console.error('[GraphState] Decode error:', e);
+    return null;
+  }
+};
 
 // ============================================================
 // SUGGESTIONS PANEL ("Explore suggestions")
