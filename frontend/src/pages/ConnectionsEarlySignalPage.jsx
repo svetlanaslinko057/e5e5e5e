@@ -65,7 +65,7 @@ const EarlySignalBadge = ({ badge }) => {
       className: 'bg-yellow-100 text-yellow-700 border-yellow-300' 
     },
     none: { 
-      label: 'Нет', 
+      label: 'None', 
       emoji: '➖', 
       className: 'bg-gray-100 text-gray-500 border-gray-200' 
     },
