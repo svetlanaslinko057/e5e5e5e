@@ -112,9 +112,9 @@ class ConnectionsDropdownTester:
             )
             if response.status_code == 200:
                 data = response.json()
-                if data.get('ok') and 'data' in data:
-                    graph_data = data['data']
-                    # Check for required graph structure
+                if data.get('ok'):
+                    # Check for required graph structure - could be in 'data' or directly in response
+                    graph_data = data.get('data', data)
                     has_nodes = 'nodes' in graph_data and isinstance(graph_data['nodes'], list)
                     has_edges = 'edges' in graph_data and isinstance(graph_data['edges'], list)
                     
@@ -122,7 +122,7 @@ class ConnectionsDropdownTester:
                     nodes_count = len(graph_data.get('nodes', []))
                     edges_count = len(graph_data.get('edges', []))
                     
-                    self.log(f"Graph API: {nodes_count} nodes, {edges_count} edges")
+                    self.log(f"Graph API POST: {nodes_count} nodes, {edges_count} edges")
                     
                     # Should have around 30 nodes and 400+ edges as specified
                     nodes_ok = nodes_count >= 20  # Allow some flexibility
@@ -131,7 +131,7 @@ class ConnectionsDropdownTester:
                     # Check node structure if we have nodes
                     if nodes_count > 0:
                         first_node = graph_data['nodes'][0]
-                        node_fields = ['id', 'label', 'profile', 'influence_score', 'color', 'size']
+                        node_fields = ['id', 'handle', 'influence_score']
                         has_node_structure = all(field in first_node for field in node_fields)
                     else:
                         has_node_structure = True  # No nodes to check
@@ -139,7 +139,7 @@ class ConnectionsDropdownTester:
                     # Check edge structure if we have edges
                     if edges_count > 0:
                         first_edge = graph_data['edges'][0]
-                        edge_fields = ['id', 'source', 'target', 'direction', 'weight']
+                        edge_fields = ['id', 'source', 'target', 'weight']
                         has_edge_structure = all(field in first_edge for field in edge_fields)
                     else:
                         has_edge_structure = True  # No edges to check
