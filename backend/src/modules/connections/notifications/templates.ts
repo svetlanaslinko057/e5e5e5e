@@ -121,6 +121,7 @@ export function formatTelegramMessage(baseUrl: string, e: ConnectionsAlertEvent)
 
   // 📈 STRONG ACCELERATION
   if (e.type === 'STRONG_ACCELERATION') {
+    const graphLink = buildGraphLinkWithState(baseUrl, e.account_id);
     return [
       '📈 STRONG ACCELERATION',
       '',
@@ -137,6 +138,9 @@ export function formatTelegramMessage(baseUrl: string, e: ConnectionsAlertEvent)
       '',
       '🔗 View trend:',
       link,
+      '',
+      '📊 Open in Graph:',
+      graphLink,
     ].join('\n');
   }
 
