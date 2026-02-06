@@ -647,9 +647,9 @@ function ConfidenceBlock({ signal }) {
       {/* Info Note */}
       <div className="mt-4 p-3 bg-blue-50 rounded-lg border border-blue-100">
         <p className="text-xs text-blue-700">
-          <strong>Что означает Confidence?</strong> Это показатель полноты данных, а не точности сигнала. 
-          Низкий confidence говорит о том, что у нас меньше исторических данных для анализа — 
-          это не значит, что сигнал неверный.
+          <strong>What does Confidence mean?</strong> It's a measure of data completeness, not signal accuracy. 
+          Low confidence means we have less historical data for analysis — 
+          it doesn't mean the signal is wrong.
         </p>
       </div>
     </div>
