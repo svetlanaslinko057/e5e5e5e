@@ -85,7 +85,7 @@ const CONFIDENCE_CONFIG = {
     text: 'text-emerald-700',
     border: 'border-emerald-200',
     label: 'High',
-    description: 'Высокое покрытие данных. Все ключевые источники доступны. Сигнал отправляется в Telegram.'
+    description: 'High data coverage. All key sources available. Signal sent to Telegram.'
   },
   MEDIUM: { 
     color: 'bg-amber-500', 
@@ -93,7 +93,7 @@ const CONFIDENCE_CONFIG = {
     text: 'text-amber-700',
     border: 'border-amber-200',
     label: 'Medium',
-    description: 'Среднее покрытие данных. Некоторые источники могут отсутствовать. Сигнал отправляется в Telegram.'
+    description: 'Medium data coverage. Some sources may be missing. Signal sent to Telegram.'
   },
   LOW: { 
     color: 'bg-orange-500', 
@@ -101,7 +101,7 @@ const CONFIDENCE_CONFIG = {
     text: 'text-orange-700',
     border: 'border-orange-200',
     label: 'Low',
-    description: 'Низкое покрытие данных. Ограниченная история транзакций. Требуется ручная проверка.'
+    description: 'Low data coverage. Limited transaction history. Manual verification required.'
   },
   HIDDEN: { 
     color: 'bg-gray-400', 
@@ -109,25 +109,25 @@ const CONFIDENCE_CONFIG = {
     text: 'text-gray-500',
     border: 'border-gray-200',
     label: 'Hidden',
-    description: 'Минимальное покрытие данных. Сигнал НЕ отправляется в Telegram автоматически.'
+    description: 'Minimal data coverage. Signal NOT sent to Telegram automatically.'
   }
 };
 
 const CONFIDENCE_BREAKDOWN_LABELS = {
   coverage: { 
-    label: 'Покрытие данных', 
+    label: 'Data Coverage', 
     icon: Database,
-    tooltip: 'Насколько полно индексированы данные снапшота'
+    tooltip: 'How completely snapshot data is indexed'
   },
   actors: { 
-    label: 'Качество акторов', 
+    label: 'Actor Quality', 
     icon: Target,
-    tooltip: 'Верификация и источники данных об акторах'
+    tooltip: 'Verification and data sources about actors'
   },
   flow: { 
-    label: 'Значимость потоков', 
+    label: 'Flow Significance', 
     icon: ArrowRightLeft,
-    tooltip: 'Объем и значимость финансовых потоков'
+    tooltip: 'Volume and significance of financial flows'
   },
   temporal: { 
     label: 'Временная стабильность', 
