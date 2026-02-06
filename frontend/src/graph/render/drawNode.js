@@ -106,6 +106,7 @@ export function drawNode(node, ctx, globalScale, opts = {}) {
   if (x === undefined || y === undefined) return;
   
   const r = getNodeRadius(node);
+  const isConnectionsMode = node.profile || node.early_signal !== undefined;
   
   ctx.save();
   
@@ -117,7 +118,13 @@ export function drawNode(node, ctx, globalScale, opts = {}) {
   // ============ ОСНОВНОЙ КРУГ ============
   ctx.beginPath();
   ctx.arc(x, y, r, 0, Math.PI * 2);
-  ctx.fillStyle = COLORS.nodeFill;
+  
+  // Connections mode: use profile/signal color
+  if (isConnectionsMode) {
+    ctx.fillStyle = getConnectionsNodeColor(node);
+  } else {
+    ctx.fillStyle = COLORS.nodeFill;
+  }
   ctx.fill();
   
   // Граница
