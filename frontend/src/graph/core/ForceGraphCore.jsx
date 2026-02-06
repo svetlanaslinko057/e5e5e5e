@@ -103,6 +103,7 @@ function ForceGraphCore({
   // ============ NODE DRAG ============
   const handleNodeDrag = useCallback((node) => {
     if (node) {
+      // Update fixed position during drag
       node.fx = node.x;
       node.fy = node.y;
     }
@@ -110,7 +111,7 @@ function ForceGraphCore({
   
   const handleNodeDragEnd = useCallback((node) => {
     if (node) {
-      // Фиксируем позицию после перетаскивания
+      // Keep node fixed at new position (static graph)
       node.fx = node.x;
       node.fy = node.y;
     }
