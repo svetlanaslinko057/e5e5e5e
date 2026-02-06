@@ -661,6 +661,10 @@ export default function ConnectionsInfluenceGraphPage() {
               node={selectedNode}
               details={nodeDetails}
               onClose={() => { setSelectedNode(null); setNodeDetails(null); }}
+              onCompare={(node) => {
+                setCompareNode(node);
+                setShowCompareModal(true);
+              }}
             />
           )}
 
