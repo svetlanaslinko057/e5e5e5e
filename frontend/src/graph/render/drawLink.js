@@ -70,6 +70,7 @@ function getConnectionsLinkColor(link) {
  * Определить цвет ребра по direction
  * 
  * ПРАВИЛО:
+ * - Connections mode: цвет по profile/early_signal
  * - direction === 'IN' → зелёный
  * - direction === 'OUT' → красный
  * - Если direction нет → вычисляем по netFlow
@@ -79,7 +80,19 @@ function getConnectionsLinkColor(link) {
  * @returns {string} - hex цвет
  */
 function getLinkColor(link) {
-  // Явный direction
+  const source = link.source;
+  const target = link.target;
+  
+  // Check if Connections mode (has profile or early_signal)
+  const isConnectionsMode = 
+    (source && (source.profile || source.early_signal !== undefined)) ||
+    (target && (target.profile || target.early_signal !== undefined));
+  
+  if (isConnectionsMode) {
+    return getConnectionsLinkColor(link);
+  }
+  
+  // Legacy mode: Явный direction
   const dir = (link.direction || '').toUpperCase();
   if (dir === 'IN') return COLORS.inflow;
   if (dir === 'OUT') return COLORS.outflow;
