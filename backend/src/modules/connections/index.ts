@@ -14,6 +14,7 @@
 
 import type { FastifyInstance } from 'fastify';
 import { registerConnectionsRoutes } from './api/routes.js';
+import { registerGraphStateRoutes } from './share/graph-state.routes.js';
 import { connectionsAdminConfig } from './admin/connections-admin.js';
 
 export async function initConnectionsModule(app: FastifyInstance): Promise<void> {
@@ -26,6 +27,7 @@ export async function initConnectionsModule(app: FastifyInstance): Promise<void>
   await app.register(
     async (instance) => {
       await registerConnectionsRoutes(instance);
+      registerGraphStateRoutes(instance);
     },
     { prefix: '/api/connections' }
   );
